@@ -130,9 +130,9 @@ namespace UserInformation.Controllers
         }
 
         [HttpPut("UpdateForProduct/{id}")]
-        public async Task<IActionResult> UpdateStatus(int id , [FromBody] bool discontinued)
+        public async Task<IActionResult> UpdateStatus(int id , [FromBody] Product dto)
         {
-             await _treeRepository.UpdateProductStatusAsync(id, discontinued);
+             await _treeRepository.UpdateProductStatusAsync(id, dto.Discontinued);
             return NoContent();
         }
     }

@@ -257,6 +257,27 @@
     "ReturnTypes": []
   },
   {
+    "ContainingType": "UserInformation.Controllers.TreesController",
+    "Method": "UpdateStatus",
+    "RelativePath": "api/Trees/UpdateForProduct/{id}",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      },
+      {
+        "Name": "dto",
+        "Type": "UserInformation.Model.Product",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
     "ContainingType": "UserInformation.Controllers.UsersController",
     "Method": "GetAll",
     "RelativePath": "api/Users",
