@@ -129,12 +129,26 @@ namespace UserInformation.Controllers
             return await _treeRepository.GetDiscontinuedProductsAsync();
         }
 
+        //[HttpPut("UpdateForProduct/{id}")]
+        //public async Task<IActionResult> UpdateStatus(int id , [FromBody] Product dto)
+        //{
+        //     await _treeRepository.UpdateProductStatusAsync(id, dto.Discontinued);
+        //    return NoContent();
+        //}
         [HttpPut("UpdateForProduct/{id}")]
-        public async Task<IActionResult> UpdateStatus(int id , [FromBody] Product dto)
+        public async Task<IActionResult> UpdateStatus(int id, [FromBody] Product dto)
         {
-             await _treeRepository.UpdateProductStatusAsync(id, dto.Discontinued);
-            return NoContent();
+            var updatedProduct = await _treeRepository.UpdateProductStatusAsync(id, dto.Discontinued);
+
+            if (updatedProduct == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(updatedProduct);
         }
+
+
     }
 
 

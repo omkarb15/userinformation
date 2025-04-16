@@ -159,15 +159,28 @@ namespace UserInformation.Repositories
             return await _context.Products.Where(p => p.Discontinued).ToListAsync();
         }
 
-        public async Task UpdateProductStatusAsync(int id, bool discontinued)
+        //public async Task UpdateProductStatusAsync(int id, bool discontinued)
+        //{
+        //    var product = await _context.Products.FindAsync(id);
+        //    if (product != null)
+        //    {
+        //        product.Discontinued = discontinued;
+        //    }
+        //    await _context.SaveChangesAsync();
+        //}
+
+        public async Task<Product?> UpdateProductStatusAsync(int id, bool discontinued)
         {
             var product = await _context.Products.FindAsync(id);
             if (product != null)
             {
                 product.Discontinued = discontinued;
+                await _context.SaveChangesAsync();
             }
-            await _context.SaveChangesAsync();
+            return product;
         }
+
+
 
     }
 }

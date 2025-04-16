@@ -25,7 +25,8 @@ namespace UserInformation.Repositories
    
         Task<IEnumerable<Product>> GetInStockProductsAsync();
         Task<IEnumerable<Product>> GetDiscontinuedProductsAsync();
-        Task UpdateProductStatusAsync(int id, bool discontinued);
+        Task<Product?> UpdateProductStatusAsync(int id, bool discontinued);
+
 
 
 
