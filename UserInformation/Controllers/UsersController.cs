@@ -1,4 +1,5 @@
-﻿using System.Reflection.Metadata.Ecma335;
+﻿using System.Linq;
+using System.Reflection.Metadata.Ecma335;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -23,6 +24,7 @@ namespace UserInformation.Controllers
         public async Task<ActionResult<IEnumerable<Asset>>> GetAll()
         {
             var result = await _context.Assets
+                 .OrderByDescending(asset => asset.Id)
                 .Select(asset => new Asset
                 {
                     Id = asset.Id,
@@ -240,6 +242,15 @@ namespace UserInformation.Controllers
             return NoContent();
         }
 
+        [HttpPost("DeleteUsers")]
+        public IActionResult DeleteUsers([FromBody] List<int?> userIds)
+        {
+            var usersToDelete = _context.Assets.Where(u => userIds.Contains(u.Id)).ToList();
+            _context.Assets.RemoveRange(usersToDelete);
+            _context.SaveChanges();
+
+            return Ok(new { message = "Users deleted successfully" });
+        }
 
 
         [HttpPost("Login")]
@@ -351,7 +362,7 @@ namespace UserInformation.Controllers
             int userId = userOptions.First().UserId; // taking userId from first one in list
 
             var existingUser = _context.UserOptions.Where(a => a.UserId == userId);
-            _context.UserOptions.RemoveRange(existingUser);
+            _context.UserOptions.RemoveRange(existingUser);                               //delete previous ans for this user
             await _context.SaveChangesAsync();
 
             _context.UserOptions.AddRange(userOptions);
