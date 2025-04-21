@@ -1,9 +1,15 @@
-﻿using System.Linq;
+﻿using System.IdentityModel.Tokens.Jwt;
+using System.Linq;
 using System.Reflection.Metadata.Ecma335;
+using System.Security.Claims;
+using System.Text;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
 using UserInformation.Model;
 
@@ -11,14 +17,17 @@ namespace UserInformation.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class UsersController : ControllerBase
     {
         private readonly UserContext _context;
+        private readonly IConfiguration _configuration;
 
 
-        public UsersController(UserContext context)
+        public UsersController(UserContext context , IConfiguration configuration)
         {
             _context = context;
+            _configuration = configuration;
         }
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Asset>>> GetAll()
@@ -252,27 +261,62 @@ namespace UserInformation.Controllers
             return Ok(new { message = "Users deleted successfully" });
         }
 
-
+        [AllowAnonymous]
         [HttpPost("Login")]
-
         public async Task<ActionResult> Login([FromBody] Asset loginRequest)
         {
-            if (string.IsNullOrEmpty(loginRequest.UserName) || string.IsNullOrEmpty(loginRequest.PassWord)) // checks field is empty or not
+            if (string.IsNullOrEmpty(loginRequest.UserName) || string.IsNullOrEmpty(loginRequest.PassWord))
             {
-                return BadRequest(new { message = "userName and Password Are required" });
+                return BadRequest(new { message = "userName and Password are required" });
             }
+
             var user = await _context.Assets.FirstOrDefaultAsync(u => u.UserName == loginRequest.UserName);
             if (user == null || user.PassWord != loginRequest.PassWord)
             {
                 return Unauthorized(new { message = "Invalid Username or password" });
-
-
             }
-             return Ok(new { message = " Login Succefully !", userId = user.Id, username = user.UserName, firstName = user.FirstName, surName = user.SurName, gender = user.Gender });
-          
 
+            var secretKey = _configuration["Jwt:SecretKey"];
+            if (string.IsNullOrEmpty(secretKey))
+            {
+                return StatusCode(500, new { message = "JWT Secret Key is not configured" });
+            }
 
+            var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey));
+            var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
+
+            var claims = new[]
+            {
+        new Claim(JwtRegisteredClaimNames.Sub, user.UserName ?? ""),
+       new Claim("userId", user.Id?.ToString() ?? ""),  
+        new Claim("email", user.EmialId ?? ""),
+        new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
+    };
+
+            var token = new JwtSecurityToken(
+                issuer: _configuration["Jwt:Issuer"],
+                audience: _configuration["Jwt:Audience"],
+                claims: claims,
+                expires: DateTime.Now.AddHours(2),
+                signingCredentials: credentials
+            );
+
+            var tokenString = new JwtSecurityTokenHandler().WriteToken(token);
+
+            return Ok(new
+            {
+                message = "Login Successful!",
+                token = tokenString,
+                userId = user.Id,
+                username = user.UserName,
+                firstName = user.FirstName,
+                surName = user.SurName,
+                gender = user.Gender
+            });
         }
+
+
+
         [HttpGet("GetQuestions/{gender}")]
         public async Task<ActionResult<IEnumerable<Question>>> GetQuestions(String gender)
             {

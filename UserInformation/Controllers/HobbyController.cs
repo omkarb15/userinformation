@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using UserInformation.Model;
 
@@ -6,6 +7,8 @@ namespace UserInformation.Controllers
 {
     [Route("api/hobbies")]
     [ApiController]
+    [Authorize]
+
     public class HobbyController : ControllerBase
     {
         public readonly UserContext _context;

@@ -168,3 +168,4 @@ C:\Users\OBorhade\source\repos\UserInformation\UserInformation\obj\Debug\net9.0\
 C:\Users\OBorhade\source\repos\UserInformation\UserInformation\bin\Debug\net9.0\UserInformation.staticwebassets.runtime.json
 C:\Users\OBorhade\source\repos\UserInformation\UserInformation\bin\Debug\net9.0\Newtonsoft.Json.dll
 C:\Users\OBorhade\source\repos\UserInformation\UserInformation\obj\Debug\net9.0\UserInformation.sourcelink.json
+C:\Users\OBorhade\source\repos\UserInformation\UserInformation\bin\Debug\net9.0\Microsoft.AspNetCore.Authentication.JwtBearer.dll
