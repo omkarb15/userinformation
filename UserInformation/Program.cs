@@ -14,7 +14,8 @@ builder.Services.AddControllers();
 builder.Services.AddDbContext<UserContext>(options =>
 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 builder.Services.AddScoped<ITreeRepository, TreeRepository>();
-builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)                    //JwtBearerDefaults.AuthenticationScheme is just a constant "Bearer", which tells ASP.NET that tokens will be sent like this:Authorization: Bearer <token>
+
     .AddJwtBearer(options =>
     {
         options.TokenValidationParameters = new TokenValidationParameters

@@ -29,6 +29,8 @@ namespace UserInformation.Controllers
             _context = context;
             _configuration = configuration;
         }
+
+        //[AllowAnonymous]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Asset>>> GetAll()
         {
@@ -49,7 +51,7 @@ namespace UserInformation.Controllers
                     string.Join(", ", _context.AssetHobbies
                     .Where(ah => ah.AssetId == asset.Id)
                     .Select(ah => ah.HobbyId)
-                    .ToList()  // reult store in memory
+                    .ToList()  // result store in memory
                     ),
 
                     HobbyName = string.Join(", ",
@@ -276,37 +278,43 @@ namespace UserInformation.Controllers
                 return Unauthorized(new { message = "Invalid Username or password" });
             }
 
-            var secretKey = _configuration["Jwt:SecretKey"];
+            var secretKey = _configuration["Jwt:SecretKey"];                                                   //Get the secret key from configuration
             if (string.IsNullOrEmpty(secretKey))
             {
                 return StatusCode(500, new { message = "JWT Secret Key is not configured" });
             }
 
-            var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey));
-            var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
+            var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey));                //This converts the secretKey string into a byte array. Cryptographic algorithms generally work with byte data rather than plain text.
+             var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
+            //var dynamicIssuer = "Issuer-" + user.UserName;                                                    // or based on some other logic
+
 
             var claims = new[]
             {
-        new Claim(JwtRegisteredClaimNames.Sub, user.UserName ?? ""),
-       new Claim("userId", user.Id?.ToString() ?? ""),  
-        new Claim("email", user.EmialId ?? ""),
-        new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
-    };
+             new Claim(JwtRegisteredClaimNames.Sub, user.UserName ?? ""),            //Here, you're saying: "The token is issued for this username".
+             new Claim("userId", user.Id?.ToString() ?? ""),  
+             new Claim("email", user.EmialId ?? ""),
+             new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())     //"jti" = JWT ID — a unique identifier for the token. generate unique identifier  
+             };
 
-            var token = new JwtSecurityToken(
-                issuer: _configuration["Jwt:Issuer"],
+            var token = new JwtSecurityToken(                      //this create jwt token here ,This line creates a JWT (JSON Web Token) using the JwtSecurityToken class. 
+                issuer:      _configuration["Jwt:Issuer"],
                 audience: _configuration["Jwt:Audience"],
                 claims: claims,
-                expires: DateTime.Now.AddHours(2),
+                expires: DateTime.Now.AddHours(1),
                 signingCredentials: credentials
             );
 
-            var tokenString = new JwtSecurityTokenHandler().WriteToken(token);
+            var tokenString = new JwtSecurityTokenHandler().WriteToken(token);       //   This line converts the JWT object (token) into a compact serialized string format — this is the actual token
+            var issuerValue = token.Issuer;                                          // The WriteToken() method takes your JWT object (JwtSecurityToken) and turns it into a string. 
+            Console.WriteLine("Token Issuer: " + issuerValue);
+
 
             return Ok(new
             {
                 message = "Login Successful!",
                 token = tokenString,
+                issuer = issuerValue,
                 userId = user.Id,
                 username = user.UserName,
                 firstName = user.FirstName,
@@ -328,7 +336,6 @@ namespace UserInformation.Controllers
             return Ok(Questions);
 
         }
-
 
 
         [HttpPost("SubmitAnswer")]
