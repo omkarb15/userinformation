@@ -21,6 +21,7 @@ namespace UserInformation.Repositories
             _treeDragDrop = _context.Set<TreeDragDrop>();
             _checkBoxTree = _context.Set<CheckBoxTree>();
             _customer = _context.Set<Customer>();
+            _product = _context.Set<Product>();
 
         }
 
@@ -40,7 +41,7 @@ namespace UserInformation.Repositories
         }
         public async Task UpdateNodeAsync(int id, Tree node)
         {
-            var existingNode = await _context.Trees.FindAsync(id);
+            var existingNode = await _nodes.FindAsync(id);
             if (existingNode == null)
             {
                 throw new KeyNotFoundException("Node Not Found");
@@ -49,18 +50,18 @@ namespace UserInformation.Repositories
             existingNode.Name = node.Name ?? existingNode.Name;  
             existingNode.ParentId = node.ParentId;                     
 
-            _context.Trees.Update(existingNode);
+            _nodes.Update(existingNode);
             await _context.SaveChangesAsync();
         }
 
         public async Task DeleteNodeAsync(int id)
         {
-            var node = await _context.Trees.FindAsync(id);
+            var node = await _nodes.FindAsync(id);
             if (node == null)
             {
                 throw new KeyNotFoundException("Node Not Found");
             }
-            _context.Trees.Remove(node);
+            _nodes.Remove(node);
             await _context.SaveChangesAsync();
         }
 
@@ -72,7 +73,7 @@ namespace UserInformation.Repositories
 
         public async Task UpdateDragdropAsync(TreeDragDrop node)
         {
-            var existingNode = await _context.TreeDragDrops.FindAsync(node.Id);
+            var existingNode = await _treeDragDrop.FindAsync(node.Id);
 
             if (existingNode == null)
             {
@@ -84,14 +85,14 @@ namespace UserInformation.Repositories
 
             _context.TreeDragDrops.Update(existingNode);
 
-            var childnodes = await _context.TreeDragDrops.Where(n => n.ParentId == existingNode.Id).ToListAsync();
+            var childnodes = await _treeDragDrop.Where(n => n.ParentId == existingNode.Id).ToListAsync();
 
             foreach(var child in childnodes)
             {
                 child.TreeViewId = node.TreeViewId;
                
             }
-            _context.TreeDragDrops.UpdateRange(childnodes);
+            _treeDragDrop.UpdateRange(childnodes);
             await _context.SaveChangesAsync();
 
         }
@@ -112,19 +113,19 @@ namespace UserInformation.Repositories
             existingNode.IsChecked = node.IsChecked;
             await UpdateChildNode(existingNode.Id, node.IsChecked);
 
-            _context.CheckBoxTrees.Update(existingNode);
+            _checkBoxTree.Update(existingNode);
 
           await _context.SaveChangesAsync();
         }
         public async Task UpdateChildNode(int parentId, bool isChecked)
         {
-            var Childnodes = await _context.CheckBoxTrees.Where(n => n.ParentId == parentId).ToListAsync();
+            var Childnodes = await _checkBoxTree.Where(n => n.ParentId == parentId).ToListAsync();
              
             foreach(var child in Childnodes)
             {
                 child.IsChecked = isChecked;
                 await UpdateChildNode(child.Id, isChecked);
-                _context.CheckBoxTrees.Update(child);
+                _checkBoxTree.Update(child);
             }
 
 
@@ -150,13 +151,13 @@ namespace UserInformation.Repositories
         }
         public async Task<IEnumerable<Product>> GetInStockProductsAsync()
         {
-            return await _context.Products.Where(p => !p.Discontinued).ToListAsync();
+            return await _product.Where(p => !p.Discontinued).ToListAsync();
 
         }
 
         public async Task<IEnumerable<Product>> GetDiscontinuedProductsAsync()
         {
-            return await _context.Products.Where(p => p.Discontinued).ToListAsync();
+            return await _product.Where(p => p.Discontinued).ToListAsync();
         }
 
         //public async Task UpdateProductStatusAsync(int id, bool discontinued)
@@ -171,7 +172,7 @@ namespace UserInformation.Repositories
 
         public async Task<Product?> UpdateProductStatusAsync(int id, bool discontinued)
         {
-            var product = await _context.Products.FindAsync(id);
+            var product = await _product.FindAsync(id);
             if (product != null)
             {
                 product.Discontinued = discontinued;

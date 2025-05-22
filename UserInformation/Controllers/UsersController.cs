@@ -40,7 +40,7 @@ namespace UserInformation.Controllers
                 {
                     Id = asset.Id,
                     FirstName = asset.FirstName,
-                    SurName = asset.SurName,    
+                    SurName = asset.SurName,
                     DOB = asset.DOB,
                     Gender = asset.Gender,
                     EmialId = asset.EmialId,
@@ -69,6 +69,16 @@ namespace UserInformation.Controllers
 
             return Ok(result);
         }
+        //[HttpGet]
+        //public async Task<ActionResult<IEnumerable<Asset>>> GetAll()
+        //{
+        //    var result = await _context.Assets
+        //        .FromSqlRaw("EXEC sp_GetAllAssetsWithHobbies")
+        //        .ToListAsync();
+
+        //    return Ok(result);
+        //}
+
 
 
 
@@ -284,8 +294,8 @@ namespace UserInformation.Controllers
                 return StatusCode(500, new { message = "JWT Secret Key is not configured" });
             }
 
-            var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey));                //This converts the secretKey string into a byte array. Cryptographic algorithms generally work with byte data rather than plain text.
-             var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
+            var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey));                //SymmetricSecurityKey means both the issuer and the consumer use the same key to sign and verify the JWT.   This converts the secretKey string into a byte array. Cryptographic algorithms generally work with byte data rather than plain text.
+            var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
             //var dynamicIssuer = "Issuer-" + user.UserName;                                                    // or based on some other logic
 
 
@@ -298,10 +308,10 @@ namespace UserInformation.Controllers
              };
 
             var token = new JwtSecurityToken(                      //this create jwt token here ,This line creates a JWT (JSON Web Token) using the JwtSecurityToken class. 
-                issuer:      _configuration["Jwt:Issuer"],
-                audience: _configuration["Jwt:Audience"],
+                issuer:      _configuration["Jwt:Issuer"],   //is retrieving the issuer value from the appsettings.json 
+                audience: _configuration["Jwt:Audience"],       //gets the audience value from the configuration.
                 claims: claims,
-                expires: DateTime.Now.AddHours(1),
+                  expires: DateTime.UtcNow.AddMinutes(50),
                 signingCredentials: credentials
             );
 
@@ -405,7 +415,7 @@ namespace UserInformation.Controllers
         [HttpPost("UserAnswers")]
         public async Task<ActionResult> SubmitAns([FromBody] List<UserOption> userOptions)
         {
-            if (userOptions== null )
+             if (userOptions== null )
             {
                 return BadRequest("No answer Provided");
 

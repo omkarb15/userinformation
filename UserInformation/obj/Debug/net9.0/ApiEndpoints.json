@@ -126,6 +126,26 @@
   },
   {
     "ContainingType": "UserInformation.Controllers.TreesController",
+    "Method": "GetColumnLinesdata",
+    "RelativePath": "api/Trees/ColumnLine",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": [
+      {
+        "Type": "System.Collections.Generic.IEnumerable\u00601[[UserInformation.Model.ColumnLine, UserInformation, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "UserInformation.Controllers.TreesController",
     "Method": "GetDiscontinuedProducts",
     "RelativePath": "api/Trees/DiscontinuedProduct",
     "HttpMethod": "GET",
@@ -202,6 +222,86 @@
   },
   {
     "ContainingType": "UserInformation.Controllers.TreesController",
+    "Method": "GetPieCharts",
+    "RelativePath": "api/Trees/GetPieChart",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": [
+      {
+        "Type": "System.Collections.Generic.IEnumerable\u00601[[UserInformation.Model.PieChart, UserInformation, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "UserInformation.Controllers.TreesController",
+    "Method": "GetAllSales",
+    "RelativePath": "api/Trees/GetSalesData",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": [
+      {
+        "Type": "System.Collections.Generic.IEnumerable\u00601[[UserInformation.Model.SaleData, UserInformation, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "UserInformation.Controllers.TreesController",
+    "Method": "getStackData",
+    "RelativePath": "api/Trees/GetStackChart",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": [
+      {
+        "Type": "System.Collections.Generic.IEnumerable\u00601[[UserInformation.Model.StackChart, UserInformation, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "UserInformation.Controllers.TreesController",
+    "Method": "GetStackChartDtos",
+    "RelativePath": "api/Trees/GetStackChartDto",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": [
+      {
+        "Type": "System.Collections.Generic.IEnumerable\u00601[[UserInformation.Model.StackChartDto, UserInformation, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "UserInformation.Controllers.TreesController",
     "Method": "GetAllNodes",
     "RelativePath": "api/Trees/GetTreeData",
     "HttpMethod": "GET",
@@ -231,6 +331,26 @@
     "ReturnTypes": [
       {
         "Type": "System.Collections.Generic.IEnumerable\u00601[[UserInformation.Model.Product, UserInformation, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "UserInformation.Controllers.TreesController",
+    "Method": "GetSankeyCharts",
+    "RelativePath": "api/Trees/SankeyChart",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": [
+      {
+        "Type": "System.Collections.Generic.IEnumerable\u00601[[UserInformation.Model.SankeyFlow, UserInformation, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
         "MediaTypes": [
           "text/plain",
           "application/json",

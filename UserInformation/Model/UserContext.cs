@@ -24,9 +24,22 @@ namespace UserInformation.Model
         public DbSet<CheckBoxTree> CheckBoxTrees { get; set; }
         public DbSet<Customer> Customers { get; set; }
         public DbSet<Product> Products { get; set; }
+        public DbSet<SaleData> SalesData { get; set; }
+        public DbSet<StackChart> StackCharts { get; set; }
+        //public DbSet<StackChartDto> stackChartDto { get; set; } do not use dto as dbset
 
 
+        protected override void OnModelCreating(ModelBuilder modelBuilder) //it is only used for projection
+        {
+            // Mark StackChartDto as keyless
+            modelBuilder.Entity<StackChartDto>().HasNoKey();
 
+            base.OnModelCreating(modelBuilder);
+        }
+        public DbSet<PieChart> PieCharts { get; set; }
+        public DbSet<SankeyFlow>SankeyFlows { get; set; }
+
+        public DbSet<ColumnLine> ColumnLines { get; set; }
 
 
     }

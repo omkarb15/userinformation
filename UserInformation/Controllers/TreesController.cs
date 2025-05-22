@@ -12,11 +12,15 @@ namespace UserInformation.Controllers
     public class TreesController : ControllerBase
     {
        private readonly ITreeRepository _treeRepository;
+        private readonly IAmChart _amChart;
 
-        public TreesController(ITreeRepository treeRepository)
+        public TreesController(ITreeRepository treeRepository , IAmChart amChart)
         {
             _treeRepository = treeRepository;
+
+            _amChart = amChart;
         }
+        
 
         [HttpGet("GetTreeData")]
         public async  Task<IEnumerable<Tree>> GetAllNodes()
@@ -150,6 +154,43 @@ namespace UserInformation.Controllers
             return Ok(updatedProduct);
         }
 
+        [HttpGet("GetSalesData")]
+
+        public async Task<IEnumerable<SaleData>> GetAllSales()
+        {
+            return await _amChart.GetAll();
+        }
+
+
+        [HttpGet("GetStackChart")]
+        public async Task<IEnumerable<StackChart>> getStackData()
+        {
+            return await _amChart.GetStack();
+        }
+
+        [HttpGet("GetStackChartDto")]
+        public async Task<IEnumerable<StackChartDto>> GetStackChartDtos()
+        {
+            return await _amChart.GetGroupedStackDto();
+        }
+
+        [HttpGet("GetPieChart")]
+        public async Task<IEnumerable<PieChart>> GetPieCharts()
+        {
+            return await _amChart.GetPieChart();
+        }
+
+        [HttpGet("SankeyChart")]
+        public async Task<ActionResult<IEnumerable<SankeyFlow>>> GetSankeyCharts()
+        {
+            var data= await _amChart.GetSankeyChart();
+            return data;
+        }
+        [HttpGet("ColumnLine")]
+        public async Task<IEnumerable<ColumnLine>> GetColumnLinesdata()
+        {
+            return await _amChart.GetColumnLines();
+        }
 
     }
 
