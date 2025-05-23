@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Identity.Client;
 using UserInformation.Model;
 
 namespace UserInformation.Repositories
@@ -14,6 +15,7 @@ namespace UserInformation.Repositories
         private readonly DbSet<PieChart> _pieChart;
         private readonly DbSet<SankeyFlow> _sankeyFlow;
         private readonly DbSet<ColumnLine>_columnLine;
+        private readonly DbSet<Student> _student;
         
         public AmChart(UserContext context)
         {
@@ -23,6 +25,7 @@ namespace UserInformation.Repositories
             _pieChart = _context.Set<PieChart>();
             _sankeyFlow= _context.Set<SankeyFlow>();
             _columnLine = _context.Set<ColumnLine>();
+            _student= _context.Set<Student>();
         }
 
         public async Task<IEnumerable<SaleData>> GetAll()
@@ -66,6 +69,10 @@ namespace UserInformation.Repositories
         public async Task<IEnumerable<ColumnLine>> GetColumnLines()
         {
             return await _columnLine.ToListAsync();
+        }
+        public async Task<IEnumerable<Student>> GetAllStudents()
+        {
+            return await _student.ToListAsync();
         }
 
     }

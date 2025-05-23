@@ -302,6 +302,26 @@
   },
   {
     "ContainingType": "UserInformation.Controllers.TreesController",
+    "Method": "GetAllStudent",
+    "RelativePath": "api/Trees/GetStudents",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": [
+      {
+        "Type": "System.Collections.Generic.IEnumerable\u00601[[UserInformation.Model.Student, UserInformation, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "UserInformation.Controllers.TreesController",
     "Method": "GetAllNodes",
     "RelativePath": "api/Trees/GetTreeData",
     "HttpMethod": "GET",

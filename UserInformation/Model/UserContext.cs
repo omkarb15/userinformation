@@ -40,6 +40,7 @@ namespace UserInformation.Model
         public DbSet<SankeyFlow>SankeyFlows { get; set; }
 
         public DbSet<ColumnLine> ColumnLines { get; set; }
+        public DbSet<Student> Students { get; set; }
 
 
     }

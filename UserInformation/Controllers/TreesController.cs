@@ -191,6 +191,11 @@ namespace UserInformation.Controllers
         {
             return await _amChart.GetColumnLines();
         }
+        [HttpGet("GetStudents")]
+        public async Task<IEnumerable<Student>> GetAllStudent()
+        {
+            return await _amChart.GetAllStudents();
+        }
 
     }
 

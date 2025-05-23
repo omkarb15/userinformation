@@ -11,6 +11,7 @@ namespace UserInformation.Repositories
         Task<IEnumerable<PieChart>> GetPieChart();
         Task<ActionResult<IEnumerable<SankeyFlow>>> GetSankeyChart();
         Task<IEnumerable<ColumnLine>>GetColumnLines();
+        Task<IEnumerable<Student>>GetAllStudents();
 
 
 
